@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: user-service
+  namespace: release
+spec:
+  hosts:
+  - "user.devops.id"
+  gateways:
+  - istio-ingressgateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        port:
+          number: 80
+        host: user-service.release.svc.cluster.local
