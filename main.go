@@ -66,7 +66,7 @@ func main() {
 		numCPUBurn       string
 		tls              bool
 	)
-	flag.StringVar(&listenAddr, "listen-addr", ":80", "server listen address")
+	flag.StringVar(&listenAddr, "listen-addr", ":8080", "server listen address")
 	flag.IntVar(&terminationDelay, "termination-delay", defaultTerminationDelay, "termination delay in seconds")
 	flag.StringVar(&numCPUBurn, "cpu-burn", "", "burn specified number of cpus (number or 'all')")
 	flag.BoolVar(&tls, "tls", false, "Enable TLS (with self-signed certificate)")
