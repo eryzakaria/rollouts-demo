@@ -1,19 +1,25 @@
-apiVersion: networking.istio.io/v1
+apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: user-service
+  name: rollouts-demo-vs2
   namespace: release
 spec:
-  hosts:
-  - "user.devops.id"
   gateways:
-  - istio-ingressgateway
+  - istio-system/istio-ingressgateway
+  hosts:
+  - "argorollout.devops.id"
   http:
-  - match:
-    - uri:
-        prefix: /
+  - name: route-one
     route:
     - destination:
+        host: rollouts-demo-svc
         port:
           number: 80
-        host: user-service.release.svc.cluster.local
+        subset: stable
+      weight: 100
+    - destination:
+        host: rollouts-demo-svc
+        port:
+          number: 80
+        subset: canary
+      weight: 0
