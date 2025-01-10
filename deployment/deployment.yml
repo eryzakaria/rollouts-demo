@@ -17,7 +17,7 @@ spec:
         - name: rollouts-demo
           image: eryzakaria14/user-service:${DOCKER_IMAGE}
           ports:
-            - containerPort: 8080
+            - containerPort: 80
           envFrom:
             - secretRef:
                 name: rollouts-demo-secrets
