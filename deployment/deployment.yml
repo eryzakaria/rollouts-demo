@@ -17,7 +17,7 @@ spec:
         - name: rollouts-demo
           image: eryzakaria14/user-service:${DOCKER_IMAGE}
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           envFrom:
             - secretRef:
                 name: rollouts-demo-secrets
@@ -32,9 +32,7 @@ metadata:
 spec:
   ports:
   - port: 80
-    targetPort: http
-    protocol: TCP
-    name: http
+    targetPort: 8080
   selector:
     app: rollouts-demo
 ---
