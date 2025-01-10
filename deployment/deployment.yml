@@ -1,47 +1,47 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-service
+  name: rollouts-demo-deployment
   namespace: release
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
-      app: user-service
+      app: rollouts-demo
   template:
     metadata:
       labels:
-        app: user-service
+        app: rollouts-demo
     spec:
       containers:
-        - name: user-service
+        - name: rollouts-demo
           image: eryzakaria14/user-service:${DOCKER_IMAGE}
           ports:
             - containerPort: 8080
           envFrom:
             - secretRef:
-                name: user-service-secrets
+                name: rollouts-demo-secrets
             - configMapRef:
-                name: user-service-config
+                name: rollouts-demo-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-service
+  name: rollouts-demo-svc
   namespace: release
 spec:
-  type: NodePort
   ports:
-    - port: 80
-      targetPort: 8080
-      name: user-service
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
   selector:
-    app: user-service
+    app: rollouts-demo
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: user-service-secrets
+  name: rollouts-demo-secrets
   namespace: release
 type: Opaque
 data:
@@ -50,22 +50,8 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: user-service-config
+  name: rollouts-demo-config
   namespace: release
 data:
   DB_HOST: "localhost"
   DB_PORT: "3306"
----
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: user-service-hpa
-  namespace: release
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: user-service
-  minReplicas: 1
-  maxReplicas: 2
-  targetCPUUtilizationPercentage: 50
